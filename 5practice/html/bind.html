@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>双向数据绑定</title>
+</head>
+<body>
+  <input class="input" type="text" value="6">
+  <div class="div"></div>
+</body>
+<script>
+  let input = document.querySelector('.input')
+  let inputStr = JSON.stringify(input)
+  console.log(input)
+  const dbBindData = function(){
+    return {
+      inputStr:6
+    }
+  }
+  Object.defineProperty(document.getElementsByClassName('input')[0],value,{
+    enumerable: true,
+    configurable: true,
+    get: function(currentVal){
+      console.log('看什么？非礼勿视')
+    },
+    set:function(newVal){
+      document.querySelector('.div').innerText = newVal
+    }
+  })
+  Object.defineProperty(document.querySelector('.div'),innerText,{
+    enumerable: true,
+    configurable: true,
+    get: function(currentVal){
+      console.log('看什么？非礼勿视')
+    },
+    set:function(newVal){
+      document.querySelector('.input').value = newVal
+    }
+  })
+  const getters = [document.querySelector('.input').value,document.querySelector('.div').innerText]
+  obj = dbBindData()
+  function bindData(){
+    for(let key in obj){
+      Object.defineProperty(obj,key,{
+        enumerable: true,
+        configurable: true,
+        get: function(val1,val2){
+          console.log('这是get()的val1和val2',val1,val2)
+        },
+        set:function(newVal){
+          console.log('这是set()的val1和val2',newVal)
+          document.querySelector('.input').value = newVal
+          document.querySelector('.div').innerText = newVal
+        }
+      })
+
+    }
+  }
+  bindData()
+</script>
+</html>
